@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expertise Value Estimator — Heart-Led Ventures</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1C2230;
+    --sky: #7FBCDA;
+    --gold: #C9A84C;
+    --cream: #F5F0E8;
+    --white: #ffffff;
+    --green: #27AE60;
+  }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+    padding: 20px 20px 120px 20px;
+  }
+
+  .estimator {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(28,34,48,0.12);
+  }
+
+  .est-header {
+    background: var(--navy);
+    padding: 36px 40px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .est-header::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: var(--sky);
+    opacity: 0.06;
+    border-radius: 50%;
+    transform: translate(60px, -60px);
+  }
+
+  .est-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 40px;
+    width: 120px; height: 2px;
+    background: var(--gold);
+  }
+
+  .brand-logo {
+    position: absolute;
+    top: 18px; right: 24px;
+    width: 152px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .brand-logo img { width: 100%; height: auto; display: block; }
+
+  .est-header h1 {
+    max-width: calc(100% - 205px);
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .est-header p {
+    max-width: calc(100% - 205px);
+    font-size: 13px;
+    color: var(--sky);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  .est-body { padding: 36px 40px 40px; }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    margin-top: 28px;
+  }
+
+  .section-label:first-child { margin-top: 0; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 28px; }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--navy);
+    opacity: 0.5;
+    margin-bottom: 8px;
+  }
+
+  .progress-track {
+    height: 3px;
+    background: rgba(28,34,48,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* STEPS */
+  .question-step { display: none; animation: fadeIn 0.35s ease; }
+  .question-step.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-text {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.45;
+    margin-bottom: 6px;
+  }
+
+  .question-sub {
+    font-size: 13px;
+    color: var(--navy);
+    opacity: 0.5;
+    margin-bottom: 22px;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* OPTION CARDS */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .options-grid.single-col { grid-template-columns: 1fr; }
+
+  .option-card {
+    border: 1.5px solid rgba(28,34,48,0.12);
+    border-radius: 3px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--cream);
+    position: relative;
+  }
+
+  .option-card:hover { border-color: var(--sky); background: rgba(127,188,218,0.06); }
+  .option-card.selected { border-color: var(--gold); background: rgba(201,168,76,0.07); }
+
+  .option-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 10px; right: 12px;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .option-label { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .option-sub { font-size: 12px; color: var(--navy); opacity: 0.5; line-height: 1.4; }
+
+  /* OPEN FIELD */
+  .open-field { margin-bottom: 20px; }
+
+  .open-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid rgba(28,34,48,0.12);
+    border-radius: 3px;
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    color: var(--navy);
+    background: var(--cream);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .open-field input:focus { outline: none; border-color: var(--sky); background: var(--white); }
+
+  .open-field .helper {
+    font-size: 11px;
+    color: var(--navy);
+    opacity: 0.45;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* OTHER WRAP */
+  .other-card { margin-top: 10px; }
+
+  .other-wrap { display: none; margin-top: 10px; }
+  .other-wrap.visible { display: block; }
+
+  .other-wrap input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--gold);
+    border-radius: 3px;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--white);
+  }
+
+  .other-wrap input:focus { outline: none; }
+
+  /* NAV */
+  .nav-row { display: flex; gap: 12px; align-items: center; margin-top: 16px; }
+
+  .btn-back {
+    padding: 12px 20px;
+    background: transparent;
+    border: 1.5px solid rgba(28,34,48,0.2);
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-back:hover { opacity: 0.9; }
+
+  .btn-next {
+    flex: 1;
+    padding: 14px 24px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    text-align: center;
+  }
+
+  .btn-next:hover { opacity: 0.88; }
+  .btn-next:active { transform: scale(0.99); }
+  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .divider { height: 1px; background: rgba(28,34,48,0.08); margin: 28px 0; }
+
+  /* EMAIL GATE */
+  .email-gate {
+    display: none;
+    background: rgba(28,34,48,0.03);
+    border: 1.5px solid rgba(28,34,48,0.1);
+    border-radius: 4px;
+    padding: 32px;
+    margin-top: 8px;
+    text-align: center;
+    animation: fadeIn 0.35s ease;
+  }
+
+  .email-gate.visible { display: block; }
+
+  .email-gate h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .email-gate p {
+    font-size: 13px;
+    color: var(--navy);
+    opacity: 0.65;
+    margin-bottom: 22px;
+    line-height: 1.6;
+  }
+
+  .gate-grid {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .gate-grid .field { flex: 1; }
+
+  .gate-grid .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--navy);
+    opacity: 0.6;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .gate-grid input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1.5px solid rgba(28,34,48,0.12);
+    border-radius: 3px;
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    color: var(--navy);
+    background: var(--cream);
+    transition: border-color 0.2s;
+  }
+
+  .gate-grid input:focus { outline: none; border-color: var(--sky); background: var(--white); }
+
+  .gate-error { display: none; font-size: 12px; color: #C0392B; margin-top: 10px; }
+  .gate-error.visible { display: block; }
+  .gate-note { font-size: 11px; color: var(--navy); opacity: 0.4; margin-top: 14px; font-style: italic; }
+
+  /* RESULTS */
+  .result-panel {
+    display: none;
+    margin-top: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 2px solid var(--navy);
+  }
+
+  .result-panel.visible { display: block; animation: slideIn 0.5s ease; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header { background: var(--navy); padding: 28px 32px 24px; text-align: center; }
+
+  .result-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sky);
+    margin-bottom: 10px;
+  }
+
+  .result-range {
+    font-family: 'Cinzel', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .result-sublabel { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 0.06em; }
+
+  .result-breakdown { background: #f8f6f1; padding: 24px 32px; }
+
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(28,34,48,0.06);
+    font-size: 13px;
+    gap: 16px;
+  }
+
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row .label { color: var(--navy); opacity: 0.65; line-height: 1.4; flex: 1; }
+  .breakdown-row .value { font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .breakdown-row .value.positive { color: var(--green); }
+
+  /* SUGGESTED PACKAGE BLOCK */
+  .package-block {
+    background: rgba(201,168,76,0.08);
+    border-left: 3px solid var(--gold);
+    padding: 18px 20px;
+    margin: 0 32px 0 32px;
+  }
+
+  .package-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .package-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .package-desc {
+    font-size: 13px;
+    color: var(--navy);
+    opacity: 0.75;
+    line-height: 1.6;
+  }
+
+  .result-insight { background: var(--navy); padding: 24px 32px; }
+
+  .result-insight p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .result-insight p strong { color: var(--white); font-weight: 700; }
+
+  .result-cta { background: var(--navy); padding: 0 32px 28px; text-align: center; }
+
+  .cta-button {
+    display: inline-block;
+    padding: 13px 28px;
+    background: var(--gold);
+    color: var(--navy);
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+  }
+
+  .cta-button:hover { opacity: 0.88; }
+
+  .reset-link {
+    display: none;
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--navy);
+    opacity: 0.4;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-decoration: underline;
+  }
+
+  .reset-link:hover { opacity: 0.7; }
+
+  .note {
+    font-size: 11px;
+    color: var(--navy);
+    opacity: 0.35;
+    line-height: 1.6;
+    margin-top: 20px;
+    font-style: italic;
+  }
+
+  /* STICKY BAR */
+  .sticky-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--navy);
+    padding: 16px 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 -4px 24px rgba(28,34,48,0.25);
+  }
+
+  .sticky-hint {
+    font-size: 12px;
+    color: var(--sky);
+    font-style: italic;
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+
+  .sticky-btn {
+    width: 100%;
+    max-width: 400px;
+    padding: 14px 24px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    text-align: center;
+  }
+
+  .sticky-btn:hover { opacity: 0.88; }
+  .sticky-btn:active { transform: scale(0.99); }
+
+  @media (max-width: 520px) {
+    .est-header { padding: 28px 24px 24px; }
+    .est-body { padding: 28px 24px 32px; }
+    .options-grid { grid-template-columns: 1fr; }
+    .gate-grid { flex-direction: column; align-items: stretch; }
+    .gate-grid .sticky-btn { max-width: 100% !important; }
+    .result-range { font-size: 30px; }
+    .result-breakdown, .result-insight, .result-cta { padding: 20px 24px; }
+    .package-block { margin: 0 24px; }
+    .brand-logo { width: 108px; top: 16px; right: 16px; }
+    .est-header h1 { font-size: 17px; max-width: calc(100% - 130px); }
+    .est-header p { max-width: calc(100% - 130px); }
+  }
+</style>
+</head>
+<body>
+
+<div class="estimator">
+
+  <div class="est-header">
+    <div class="brand-logo">
+      <img src="https://heart-ledventures.carrd.co/assets/images/image02.png" alt="Heart-Led Ventures">
+    </div>
+    <h1>Your Expertise Value Estimator</h1>
+    <p>Five questions. See what your professional experience is worth on the open market.</p>
+  </div>
+
+  <div class="est-body">
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressText">Question 1 of 5</span>
+        
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:20%"></div>
+      </div>
+    </div>
+
+    <!-- Q1: Years of experience -->
+    <div class="question-step active" id="step-1">
+      <div class="section-label">Your Foundation</div>
+      <div class="question-text">How many years of professional experience do you have?</div>
+      <div class="question-sub">Count your total working years across all roles and industries.</div>
+      <div class="options-grid">
+        <div class="option-card" data-q="1" data-value="1" onclick="selectOption(this)">
+          <div class="option-label">10–15 years</div>
+          <div class="option-sub">Strong foundation, clear expertise emerging</div>
+        </div>
+        <div class="option-card" data-q="1" data-value="2" onclick="selectOption(this)">
+          <div class="option-label">16–20 years</div>
+          <div class="option-sub">Deep specialization, proven track record</div>
+        </div>
+        <div class="option-card" data-q="1" data-value="3" onclick="selectOption(this)">
+          <div class="option-label">21–25 years</div>
+          <div class="option-sub">Senior-level mastery, broad influence</div>
+        </div>
+        <div class="option-card" data-q="1" data-value="4" onclick="selectOption(this)">
+          <div class="option-label">25+ years</div>
+          <div class="option-sub">Rare expertise, institutional knowledge</div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-next" id="next-1" disabled="" onclick="goNext(1)">Next</button>
+      </div>
+    </div>
+
+    <!-- Q2: Field — open text -->
+    <div class="question-step" id="step-2">
+      <div class="section-label">Your Field</div>
+      <div class="question-text">What is your primary professional field?</div>
+      <div class="question-sub">Use your own words — be as specific as you like.</div>
+      <div class="open-field">
+        <input type="text" id="q2-field" placeholder="e.g. Nonprofit leadership, Healthcare administration, Corporate finance..." oninput="validateOpenField()">
+        <div class="helper">Your field affects your market rate. The more specific you are, the more accurate your estimate.</div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack(2)">Back</button>
+        <button class="btn-next" id="next-2" disabled="" onclick="goNext(2)">Next</button>
+      </div>
+    </div>
+
+    <!-- Q3: Expertise type -->
+    <div class="question-step" id="step-3">
+      <div class="section-label">What You're Known For</div>
+      <div class="question-text">Which best describes what you are known for professionally?</div>
+      <div class="question-sub">Choose the one that fits most naturally.</div>
+      <div class="options-grid">
+        <div class="option-card" data-q="3" data-value="1" onclick="selectOption(this)">
+          <div class="option-label">I solve complex problems for organizations</div>
+          <div class="option-sub">Strategy, turnarounds, diagnostics, process improvement</div>
+        </div>
+        <div class="option-card" data-q="3" data-value="2" onclick="selectOption(this)">
+          <div class="option-label">I develop and lead people and teams</div>
+          <div class="option-sub">Management, coaching, training, talent development</div>
+        </div>
+        <div class="option-card" data-q="3" data-value="3" onclick="selectOption(this)">
+          <div class="option-label">I design and run programs and operations</div>
+          <div class="option-sub">Building systems, managing large initiatives, running departments</div>
+        </div>
+        <div class="option-card" data-q="3" data-value="4" onclick="selectOption(this)">
+          <div class="option-label">I teach, train, or transfer knowledge</div>
+          <div class="option-sub">Curriculum, facilitation, instruction, skills development</div>
+        </div>
+      </div>
+      <div class="options-grid single-col other-card">
+        <div class="option-card" data-q="3" data-value="5" onclick="selectOptionOther(this, &#39;other-q3&#39;)">
+          <div class="option-label">I consult or advise in a specialized field</div>
+          <div class="option-sub">Law, finance, healthcare, policy, technology — or describe your own</div>
+        </div>
+        <div class="other-wrap" id="other-q3">
+          <input type="text" id="other-q3-text" placeholder="Describe what you do in your own words..." oninput="validateOtherField(&#39;other-q3-text&#39;, 3)">
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack(3)">Back</button>
+        <button class="btn-next" id="next-3" disabled="" onclick="goNext(3)">Next</button>
+      </div>
+    </div>
+
+    <!-- Q4: Delivery format -->
+    <div class="question-step" id="step-4">
+      <div class="section-label">How You'd Deliver It</div>
+      <div class="question-text">How would you most naturally share your expertise with others?</div>
+      <div class="question-sub">Think about what feels most natural — not what you think you should do.</div>
+      <div class="options-grid">
+        <div class="option-card" data-q="4" data-value="1" onclick="selectOption(this)">
+          <div class="option-label">One-on-one consulting</div>
+          <div class="option-sub">Working directly with individuals or organizations on specific engagements</div>
+        </div>
+        <div class="option-card" data-q="4" data-value="2" onclick="selectOption(this)">
+          <div class="option-label">Group workshops or training</div>
+          <div class="option-sub">Teaching or facilitating small to mid-size groups</div>
+        </div>
+        <div class="option-card" data-q="4" data-value="3" onclick="selectOption(this)">
+          <div class="option-label">Online course or program</div>
+          <div class="option-sub">Packaged curriculum people work through at their own pace</div>
+        </div>
+        <div class="option-card" data-q="4" data-value="4" onclick="selectOption(this)">
+          <div class="option-label">Speaking or facilitation</div>
+          <div class="option-sub">Keynotes, panels, facilitated events, and conferences</div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack(4)">Back</button>
+        <button class="btn-next" id="next-4" disabled="" onclick="goNext(4)">Next</button>
+      </div>
+    </div>
+
+    <!-- Q5: In person or virtual -->
+    <div class="question-step" id="step-5">
+      <div class="section-label">Your Reach</div>
+      <div class="question-text">Would you prefer to work in person, virtually, or both?</div>
+      <div class="question-sub">This affects your potential market size and income range.</div>
+      <div class="options-grid single-col">
+        <div class="option-card" data-q="5" data-value="1" onclick="selectOption(this)">
+          <div class="option-label">In person</div>
+          <div class="option-sub">Local or regional — you prefer face-to-face work</div>
+        </div>
+        <div class="option-card" data-q="5" data-value="2" onclick="selectOption(this)">
+          <div class="option-label">Virtually</div>
+          <div class="option-sub">Online only — clients anywhere, no travel required</div>
+        </div>
+        <div class="option-card" data-q="5" data-value="3" onclick="selectOption(this)">
+          <div class="option-label">Both — in person and virtual</div>
+          <div class="option-sub">Maximum flexibility and the widest possible market</div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack(5)">Back</button>
+        <button class="btn-next" id="next-5" disabled="" onclick="showGate()">See My Estimate</button>
+      </div>
+    </div>
+
+    <div class="divider" id="mainDivider" style="display:none;"></div>
+
+    <!-- EMAIL GATE -->
+    <div class="email-gate" id="emailGate">
+      <h3>Your estimate is ready.</h3>
+      <p>Enter your email and we'll show you your range — plus send you a short guide on where most professionals in your field leave money on the table.</p>
+      <div class="gate-grid">
+        <div class="field">
+          <label>First Name</label>
+          <input type="text" id="leadFirstName" placeholder="Your first name" autocomplete="given-name">
+        </div>
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="leadEmail" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <button class="sticky-btn" style="max-width:200px;" onclick="submitGate()">Show My Estimate</button>
+      </div>
+      <div class="gate-error" id="gateError">Please enter your name and a valid email address to continue.</div>
+      <div class="gate-note">Your estimate appears immediately. No spam, ever.</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="result-panel" id="resultPanel"></div>
+
+    <p class="note" id="resultNote" style="display:none;">This estimate reflects general market rates for packaged expertise in consulting, training, advising, and online programs. Actual income depends on positioning, pricing, audience, and delivery. It is a directional estimate — not a financial projection.</p>
+    <div class="reset-link" id="resetLink" onclick="resetAll()">Start over with different answers</div>
+
+  </div>
+</div>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-hint" id="stickyHint">Answer all five questions, then see your estimate</div>
+  <button class="sticky-btn" onclick="handleStickyClick()">Get My Expertise Estimate</button>
+</div>
+
+<script>
+// ─── CTA CONFIG (swap after webinar) ─────────────────────
+const CTA_LABEL = 'Save My Spot — Free Webinar';
+const CTA_URL   = 'https://heart-ledventures.carrd.co/webinar';
+
+// ─── KIT CONFIG ──────────────────────────────────────────
+const KIT_FORM_ID = '9332023';
+
+// ─── STATE ───────────────────────────────────────────────
+const answers = { 1: null, 2: null, 3: null, 4: null, 5: null };
+let currentStep = 1;
+const TOTAL = 5;
+let hasCapturedLead = false;
+let isOtherField = false; // tracks if Q2 "other" field needs special Kit tag
+
+try {
+  hasCapturedLead = localStorage.getItem('hlv_estimator_gate_complete') === 'true';
+} catch(e) {}
+
+// ─── PROGRESS ────────────────────────────────────────────
+function updateProgress(step) {
+  const pct = Math.round((step / TOTAL) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + step + ' of ' + TOTAL;
+  
+}
+
+// ─── FIELD DETECTION — maps typed field to tier multiplier ──
+// IMPORTANT: Tier 3 anchor fields are checked FIRST to prevent false
+// Tier 1 overrides. e.g. "nonprofit leader" must not match "leader" → Tier 1.
+function detectFieldTier(fieldText) {
+  const f = fieldText.toLowerCase();
+
+  // ── ANCHOR CHECK — these fields are always Tier 3 regardless of other words ──
+  // Check these before ANY tier 1/2 scan to prevent false positives.
+  const tier3Anchors = [
+    'nonprofit','non-profit','ngo','foundation','philanthropy','social sector','501',
+    'social work','social worker','case management',
+    'mental health','counseling','counselor','therapist','therapy','behavioral health',
+    'education','educator','teaching','teacher','curriculum','professor','dean','school district',
+    'public school','k-12','k12',
+    'government','public administration','public servant','civil servant','municipal','city manager',
+    'county','state agency','federal agency',
+    'community organiz','community development','community service',
+    'social impact','impact investing','community impact',
+    'program director','director of programs',
+    'executive director','associate director','deputy director'
+  ];
+
+  for (const kw of tier3Anchors) {
+    if (f.includes(kw)) return { tier: 3, mult: 1.0, anchor: kw };
+  }
+
+  // ── TIER 1 — 1.35x — Premium market ──
+  const tier1 = [
+    'legal','law firm','attorney','lawyer','compliance','regulatory','litigation','general counsel',
+    'investment bank','wealth management','private equity','hedge fund','capital markets','venture capital',
+    'cfo','chief financial','controller','accounting firm','tax law','audit partner',
+    'software engineer','data science','data engineer','cybersecurity','information security',
+    'it director','chief information','chief technology','cto','cio',
+    'corporate strategy','management consulting','strategy consulting',
+    'mckinsey','deloitte','bcg','bain','accenture','kpmg','pwc','ernst',
+    'sales director','chief revenue','vp sales','business development director',
+    'investment advisor','financial advisor','financial planner','portfolio manager'
+  ];
+
+  // ── TIER 2 — 1.15x — Strong market ──
+  const tier2 = [
+    'healthcare admin','hospital administration','health system','public health','epidemiol',
+    'health policy','clinical operations','healthcare management','health care admin',
+    'marketing director','vp marketing','chief marketing','communications director',
+    'public relations','brand strategy','content strategy',
+    'human resources','hr director','chief people','talent acquisition','talent management',
+    'people operations','dei director','diversity equity','organizational development',
+    'learning and development','l&d','training and development',
+    'operations director','vp operations','supply chain','logistics','procurement director',
+    'project management','program management','pmo director',
+    'independent consultant','management consultant','fractional',
+    'entrepreneur','small business owner','startup founder','business owner'
+  ];
+
+  // ── TIER 3 — 1.0x — Solid market ──
+  const tier3Extended = [
+    'university','college','higher education','academic',
+    'instruction','instructional design','adult education','workforce development',
+    'association management','trade association','membership organization',
+    'real estate','property management','facilities management',
+    'public policy','policy analyst','policy director',
+    'psychology','psychiatric','clinical psychology','social psychology',
+    'equity','racial equity','social justice','advocacy',
+    'capacity building','technical assistance','grant management',
+    'volunteer management','donor relations','fundraising',
+    'career development','workforce training','job training'
+  ];
+
+  // ── TIER 4 — 0.88x — Emerging/niche ──
+  const tier4 = [
+    'fine art','visual art','performing art','music teacher','film maker',
+    'journalism','journalist','writer','author','photographer','fashion design',
+    'graphic design','interior design','creative director'
+  ];
+
+  for (const kw of tier1) { if (f.includes(kw)) return { tier: 1, mult: 1.35 }; }
+  for (const kw of tier2) { if (f.includes(kw)) return { tier: 2, mult: 1.15 }; }
+  for (const kw of tier3Extended) { if (f.includes(kw)) return { tier: 3, mult: 1.0 }; }
+  for (const kw of tier4) { if (f.includes(kw)) return { tier: 4, mult: 0.88 }; }
+
+  return { tier: 3, mult: 1.0 }; // default base
+}
+
+// ─── OPTION SELECTION ────────────────────────────────────
+function selectOption(card) {
+  const q = parseInt(card.dataset.q);
+  document.querySelectorAll(`.option-card[data-q="${q}"]`).forEach(c => c.classList.remove('selected'));
+  const otherWrap = document.getElementById('other-q' + q);
+  if (otherWrap) otherWrap.classList.remove('visible');
+  card.classList.add('selected');
+  answers[q] = { value: parseInt(card.dataset.value), label: card.querySelector('.option-label').textContent.trim() };
+  const nextBtn = document.getElementById('next-' + q);
+  if (nextBtn) nextBtn.disabled = false;
+  // auto-advance except Q5
+  if (q < 5) setTimeout(() => { if (answers[q]) goNext(q); }, 380);
+}
+
+function selectOptionOther(card, wrapperId) {
+  const q = parseInt(card.dataset.q);
+  document.querySelectorAll(`.option-card[data-q="${q}"]`).forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  answers[q] = null;
+  const nextBtn = document.getElementById('next-' + q);
+  if (nextBtn) nextBtn.disabled = true;
+  const wrap = document.getElementById(wrapperId);
+  if (wrap) { wrap.classList.add('visible'); document.getElementById(wrapperId + '-text').focus(); }
+}
+
+function validateOtherField(inputId, q) {
+  const val = document.getElementById(inputId).value.trim();
+  if (val.length > 2) {
+    answers[q] = { value: 5, label: val };
+    const nextBtn = document.getElementById('next-' + q);
+    if (nextBtn) nextBtn.disabled = false;
+  } else {
+    answers[q] = null;
+    const nextBtn = document.getElementById('next-' + q);
+    if (nextBtn) nextBtn.disabled = true;
+  }
+}
+
+function validateOpenField() {
+  const val = document.getElementById('q2-field').value.trim();
+  if (val.length > 2) {
+    answers[2] = { value: 1, label: val };
+    document.getElementById('next-2').disabled = false;
+  } else {
+    answers[2] = null;
+    document.getElementById('next-2').disabled = true;
+  }
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+function goNext(from) {
+  if (!answers[from]) return;
+  const next = from + 1;
+  document.getElementById('step-' + from).classList.remove('active');
+  document.getElementById('step-' + next).classList.add('active');
+  currentStep = next;
+  updateProgress(next);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack(from) {
+  const prev = from - 1;
+  document.getElementById('step-' + from).classList.remove('active');
+  document.getElementById('step-' + prev).classList.add('active');
+  currentStep = prev;
+  updateProgress(prev);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleStickyClick() {
+  if (currentStep <= TOTAL) {
+    document.getElementById('step-' + currentStep).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ─── GATE ────────────────────────────────────────────────
+function showGate() {
+  for (let i = 1; i <= TOTAL; i++) document.getElementById('step-' + i).classList.remove('active');
+  document.getElementById('mainDivider').style.display = 'block';
+  if (hasCapturedLead) {
+    revealResults();
+  } else {
+    document.getElementById('emailGate').classList.add('visible');
+    document.getElementById('stickyHint').textContent = 'Enter your email above to unlock your estimate';
+    setTimeout(() => {
+      document.getElementById('emailGate').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+}
+
+function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function submitGate() {
+  const firstNameInput = document.getElementById('leadFirstName');
+  const emailInput     = document.getElementById('leadEmail');
+  const gateError      = document.getElementById('gateError');
+  const firstName      = (firstNameInput.value || '').trim();
+  const email          = (emailInput.value || '').trim();
+
+  if (firstName.length < 1 || !isValidEmail(email)) { gateError.classList.add('visible'); if (firstName.length < 1) { firstNameInput.focus(); } else { emailInput.focus(); } return; }
+  gateError.classList.remove('visible');
+  hasCapturedLead = true;
+  try { localStorage.setItem('hlv_estimator_gate_complete', 'true'); } catch(e) {}
+
+  // ── BUILD TAGS ───────────────────────────────────────────
+  const tags = ['estimator-lead'];
+
+  // Q2: Field/sector tag — maps to your four audience segments
+  const fieldText = answers[2]?.label || '';
+  const sector = detectSector(fieldText);
+  const sectorTagMap = {
+    nonprofit:  'sector-nonprofit',
+    education:  'sector-education',
+    government: 'sector-government',
+    healthcare: 'sector-healthcare',
+    mentalhealth: 'sector-mentalhealth',
+    legal:      'sector-legal',
+    finance:    'sector-finance',
+    tech:       'sector-tech',
+    marketing:  'sector-marketing',
+    hr:         'sector-hr',
+    general:    'sector-other'
+  };
+  tags.push(sectorTagMap[sector] || 'sector-other');
+
+  // Q3: Expertise type tag — helps sequence by what they sell
+  const expertiseTagMap = {
+    1: 'expertise-strategy',
+    2: 'expertise-leadership',
+    3: 'expertise-operations',
+    4: 'expertise-teaching',
+    5: 'expertise-other'
+  };
+  const expertiseVal = answers[3]?.value;
+  if (expertiseVal) tags.push(expertiseTagMap[expertiseVal] || 'expertise-other');
+
+  // Q5: Delivery preference tag
+  const reachTagMap = { 1: 'reach-inperson', 2: 'reach-virtual', 3: 'reach-both' };
+  const reachVal = answers[5]?.value;
+  if (reachVal) tags.push(reachTagMap[reachVal] || 'reach-virtual');
+
+  // Kit API submission — first name + full segmentation tags
+  fetch(`https://app.kit.com/forms/${KIT_FORM_ID}/subscriptions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email_address: email, first_name: firstName, tags })
+  }).catch(() => {});
+
+  revealResults();
+}
+
+// ─── FIELD SECTOR DETECTION (for package language) ───────
+function detectSector(fieldText) {
+  const f = fieldText.toLowerCase();
+  if (f.includes('nonprofit') || f.includes('non-profit') || f.includes('ngo') || f.includes('foundation') || f.includes('philanthropy') || f.includes('social sector') || f.includes('501') || f.includes('association')) return 'nonprofit';
+  if (f.includes('education') || f.includes('teaching') || f.includes('teacher') || f.includes('curriculum') || f.includes('school') || f.includes('university') || f.includes('college') || f.includes('professor') || f.includes('academic') || f.includes('k-12') || f.includes('instructional')) return 'education';
+  if (f.includes('government') || f.includes('public administration') || f.includes('public policy') || f.includes('municipal') || f.includes('federal') || f.includes('state agency') || f.includes('civil servant') || f.includes('public sector')) return 'government';
+  if (f.includes('healthcare') || f.includes('health care') || f.includes('hospital') || f.includes('clinical') || f.includes('public health') || f.includes('health system') || f.includes('nursing') || f.includes('medical')) return 'healthcare';
+  if (f.includes('mental health') || f.includes('counseling') || f.includes('therapist') || f.includes('therapy') || f.includes('social work') || f.includes('behavioral health') || f.includes('psychology')) return 'mentalhealth';
+  if (f.includes('legal') || f.includes('law') || f.includes('attorney') || f.includes('compliance') || f.includes('regulatory')) return 'legal';
+  if (f.includes('finance') || f.includes('financial') || f.includes('investment') || f.includes('banking') || f.includes('accounting') || f.includes('wealth')) return 'finance';
+  if (f.includes('technology') || f.includes('software') || f.includes('data') || f.includes('cybersecurity') || f.includes('it ') || f.includes('tech')) return 'tech';
+  if (f.includes('marketing') || f.includes('communications') || f.includes('public relations') || f.includes('brand')) return 'marketing';
+  if (f.includes('human resources') || f.includes('hr ') || f.includes('talent') || f.includes('dei') || f.includes('diversity') || f.includes('organizational development')) return 'hr';
+  return 'general';
+}
+
+// ─── PACKAGE LOGIC — field-aware ─────────────────────────
+function getSuggestedPackage(expertiseVal, deliveryVal, fieldText) {
+  const e = expertiseVal;
+  const d = deliveryVal;
+  const sector = detectSector(fieldText);
+
+  // ── SPEAKING — always the same regardless of field ──
+  if (d === 4) return {
+    title: 'Keynote and Workshop Package',
+    desc: 'Speaking engagements open the door. Workshops are where the real revenue lives. A keynote establishes your authority with an audience; the follow-on workshop is where they pay for your time and process. Many experienced professionals build a full income stream from speaking alone — especially when they develop a signature talk tied to a specific problem their audience faces.'
+  };
+
+  // ── ONLINE COURSE — field-aware ──
+  if (d === 3) {
+    const onlineTitles = {
+      nonprofit: { title: 'Nonprofit Capacity Building Online Program', desc: 'A self-paced or cohort-based online program that teaches nonprofit professionals a specific skill — grant writing, program design, board development, fundraising strategy, or operational systems. Small nonprofits cannot afford full consulting engagements, but they will pay for a well-packaged online course that solves a defined problem. This format reaches a wide audience and runs without requiring your ongoing time.' },
+      education: { title: 'Educator Professional Development Program', desc: 'A self-paced or cohort-based online program built around a specific teaching methodology, curriculum framework, or instructional approach you have developed. Schools, districts, and individual educators pay for professional development that is practical and immediately applicable. Once built, this format is fully repeatable.' },
+      government: { title: 'Public Sector Skills and Compliance Training', desc: 'A structured online program that teaches a specific regulatory, administrative, or operational skill set to public sector professionals. Government agencies and municipalities purchase professional development for their teams — and well-packaged online programs that speak directly to their environment are in consistent demand.' },
+      healthcare: { title: 'Healthcare Professional Development Program', desc: 'A structured online program built around a clinical, operational, or administrative skill that healthcare professionals need but rarely have time to develop on the job. This format works especially well for topics like patient communication, care coordination, operational efficiency, or leadership skills for clinical managers.' },
+      mentalhealth: { title: 'Practitioner Skills or Supervision Program', desc: 'A structured online program for mental health practitioners seeking continuing education, supervision hours, or specialized skill development. This market is active and underserved — practitioners are required to maintain credentials and actively seek quality programs that fit their schedule.' },
+      general: { title: 'Signature Online Program', desc: 'A self-paced or cohort-based online program built around your single strongest expertise area. The goal is not to teach everything you know — it is to solve one specific problem for one specific audience, start to finish. Once built, this format is repeatable and can generate income independent of your time.' }
+    };
+    return onlineTitles[sector] || onlineTitles.general;
+  }
+
+  // ── ONE-ON-ONE CONSULTING ──
+  if (d === 1) {
+    // Problem solver
+    if (e === 1) {
+      const projectTitles = {
+        nonprofit: { title: 'Nonprofit Strategy or Turnaround Consulting', desc: 'A scoped consulting engagement where you help a nonprofit diagnose a specific challenge — funding strategy, program design, organizational restructuring, or leadership transitions — and deliver a clear action plan. Engagements typically run one to three months for a focused diagnostic, or longer for implementation support. Nonprofits actively seek outside strategists who understand their sector and can move quickly.' },
+        education: { title: 'School or District Strategy Consulting', desc: 'A project-based engagement where you help an educational institution — a school, district, or education-focused organization — work through a defined strategic challenge. This might be a curriculum overhaul, a turnaround plan, a new program launch, or a data-informed improvement process. You bring the outside perspective and the structured process. They bring the context.' },
+        government: { title: 'Public Sector Strategy or Process Improvement Consulting', desc: 'A scoped consulting engagement where you help a government agency or municipality solve a defined operational or strategic problem — a process redesign, a departmental reorganization, a new initiative launch, or a policy implementation challenge. Public sector clients move deliberately, but they pay well for experienced outside counsel who understand how government actually works.' },
+        healthcare: { title: 'Healthcare Operations or Strategy Consulting', desc: 'A project-based consulting engagement focused on a specific operational, clinical, or administrative challenge — a workflow redesign, a program launch, a quality improvement initiative, or a leadership transition. Healthcare organizations at every level need experienced outside consultants who understand the sector and can deliver results within its constraints.' },
+        general: { title: 'Project-Based Consulting', desc: 'A scoped consulting engagement tied to a specific problem — typically a diagnostic and solution phase of one to three months, or a longer implementation engagement of six to twelve months depending on complexity. You assess the situation, prescribe a solution, and deliver it. The client pays for the outcome, not the hours. This is one of the highest-value formats available to experienced professionals.' }
+      };
+      return projectTitles[sector] || projectTitles.general;
+    }
+
+    // People developer
+    if (e === 2) {
+      const peopleTitles = {
+        nonprofit: { title: 'Nonprofit Leadership Coaching Package', desc: 'A structured coaching engagement — typically three to six months — with nonprofit executive directors, program directors, or emerging leaders in the sector. Nonprofit leaders are chronically underinvested in. They carry enormous responsibility with limited support. A coach who understands the sector\'s specific pressures — board dynamics, funder relationships, staff retention — commands strong rates and deep loyalty.' },
+        education: { title: 'School Leadership or Teacher Development Coaching', desc: 'A structured coaching engagement with school principals, department heads, or instructional coaches. Education leaders are often promoted into leadership without leadership development. A coach who has lived inside the system and understands its culture, politics, and constraints is exactly what this market is looking for.' },
+        government: { title: 'Public Sector Leadership Coaching', desc: 'A structured coaching engagement with government managers, agency directors, or elected officials navigating leadership transitions, team challenges, or organizational change. Public sector leaders often have fewer executive development resources than their corporate counterparts. Experienced coaches with government backgrounds are in short supply and consistent demand.' },
+        healthcare: { title: 'Clinical Leadership or Healthcare Management Coaching', desc: 'A structured coaching engagement with nurse managers, clinical directors, department heads, or hospital administrators stepping into or growing in leadership roles. Healthcare promotes clinical expertise into leadership positions — and those leaders often need coaching support that understands both the clinical environment and the organizational pressures they now face.' },
+        mentalhealth: { title: 'Clinical Supervision or Practitioner Coaching', desc: 'Structured supervision or coaching for early-career mental health practitioners working toward licensure, or experienced practitioners navigating career transitions, burnout, or private practice development. This is a consistent and growing market — and experienced supervisors with a structured approach command strong per-session and package rates.' },
+        general: { title: 'Executive or Leadership Coaching Package', desc: 'A structured coaching engagement — typically three to six months — with senior professionals, emerging leaders, or high-potential teams. Clients pay for your judgment, your framework, and your ability to accelerate their growth. This format commands strong rates because the outcomes are directly tied to career and organizational performance.' }
+      };
+      return peopleTitles[sector] || peopleTitles.general;
+    }
+
+    // Program designer / operator
+    if (e === 3) {
+      const programTitles = {
+        nonprofit: { title: 'Nonprofit Program Design or Fractional Program Director', desc: 'Organizations bring you in to design a new program, restructure an existing one, or serve as a fractional program director while they build internal capacity. Small to mid-size nonprofits frequently need senior program expertise on a project basis — and cannot afford a full-time hire. You bring the structure, the experience, and the result. They pay for the engagement, not the overhead.' },
+        education: { title: 'Curriculum Design or Instructional Systems Consulting', desc: 'A project-based engagement where you design or redesign a curriculum, an instructional framework, or an educational program for a school, district, or education organization. This format works especially well when you have a clear methodology that is repeatable across different content areas or grade levels.' },
+        government: { title: 'Program Design or Fractional Program Manager', desc: 'A fractional or project-based engagement where you build or manage a specific government program, initiative, or administrative function. Agencies and municipalities frequently need experienced program managers for defined periods — new initiatives, transitions, or capacity gaps — and cannot always justify a full-time hire. Your experience navigating government systems is the asset.' },
+        healthcare: { title: 'Healthcare Program Design or Fractional Operations Role', desc: 'A project-based or fractional engagement where you design, launch, or manage a specific healthcare program or operational function. This might be a new patient services program, a care coordination initiative, a quality improvement effort, or a department restructuring. Healthcare organizations at every level need experienced program builders — and fractional arrangements are increasingly common.' },
+        general: { title: 'Fractional or Project-Based Engagement', desc: 'Organizations bring you in to build or run something specific — a program, a function, an initiative — without hiring full-time. Fractional engagements typically run three to twelve months and are billed as a monthly retainer or project fee. This format is in high demand as organizations look for experienced leadership without the overhead of a permanent hire.' }
+      };
+      return programTitles[sector] || programTitles.general;
+    }
+
+    // Teacher / trainer
+    if (e === 4) {
+      const teachTitles = {
+        nonprofit: { title: 'Nonprofit Staff Training or Board Development Engagement', desc: 'A targeted training engagement for nonprofit staff or board members on a specific skill — fundraising, program evaluation, grant management, financial oversight, or governance. Nonprofits regularly invest in staff and board development, especially when framed as capacity building rather than consulting. A former nonprofit leader who knows the language and the culture is exactly who they want in the room.' },
+        education: { title: 'Teacher Training or Instructional Coaching Engagement', desc: 'A private or small-group training engagement with teachers, instructional coaches, or curriculum specialists working to develop a specific skill or adopt a new approach. Schools and districts purchase this kind of targeted professional development regularly. The more specific your methodology, the more repeatable and scalable this engagement becomes.' },
+        government: { title: 'Public Sector Skills Training Engagement', desc: 'A targeted training engagement for government teams on a specific skill — process improvement, policy implementation, communication, project management, or data use. Government agencies at every level invest in staff development. A trainer who understands the public sector environment and speaks its language has a significant advantage over generalist trainers.' },
+        healthcare: { title: 'Clinical Skills or Healthcare Team Training', desc: 'A targeted training engagement for healthcare teams on a specific clinical, operational, or communication skill. This might be patient communication, interdisciplinary collaboration, care coordination, quality improvement methods, or leadership skills for frontline managers. Healthcare organizations invest heavily in team training — and experienced trainers from within the sector command strong rates.' },
+        mentalhealth: { title: 'Clinical Skills Training or Peer Consultation', desc: 'A structured training engagement for mental health practitioners seeking to develop a specific clinical skill — a therapeutic modality, a population specialty, a documentation system, or a private practice management skill. This market is active and will pay for training from experienced practitioners who can deliver practical, immediately applicable content.' },
+        general: { title: 'Private Training or Mentorship Engagement', desc: 'A one-on-one training or mentorship engagement with an individual or small team. You transfer a specific skill or body of knowledge over a defined period. This format works especially well when the expertise is specialized and the learner needs personalized instruction rather than a group program.' }
+      };
+      return teachTitles[sector] || teachTitles.general;
+    }
+
+    // Specialized advisor
+    if (e === 5) {
+      const advisorTitles = {
+        legal: { title: 'Legal Advisory Retainer', desc: 'A monthly retainer arrangement where organizations pay for ongoing access to your legal expertise — without the overhead of a full firm engagement. This format works especially well for compliance, regulatory guidance, contract review, and risk management. In-house legal advisors who go independent consistently find strong demand from small to mid-size organizations that need senior legal judgment on a part-time basis.' },
+        finance: { title: 'Financial Advisory or Fractional CFO Retainer', desc: 'A monthly retainer where organizations pay for ongoing access to your financial expertise — financial strategy, modeling, fundraising preparation, or CFO-level judgment without a full-time hire. Small to mid-size organizations, startups, and nonprofits actively seek experienced financial advisors on a fractional basis. This is one of the most in-demand advisory formats in the current market.' },
+        general: { title: 'Specialized Advisory Retainer', desc: 'A monthly retainer arrangement where clients pay for ongoing access to your field-specific expertise. The client pays for your judgment, your network, and your availability. This format is most powerful when your expertise is rare, the stakes are high, and the client needs consistent access rather than a one-time project.' }
+      };
+      return advisorTitles[sector] || advisorTitles.general;
+    }
+  }
+
+  // ── GROUP WORKSHOPS ──
+  if (d === 2) {
+    // Problem solver
+    if (e === 1) {
+      const groupProblemTitles = {
+        nonprofit: { title: 'Nonprofit Strategy Session or Organizational Assessment Workshop', desc: 'A structured one to two day working session where you bring a nonprofit leadership team or board through a defined strategic planning process, organizational assessment, or problem-solving exercise. You deliver a clear set of recommendations and a prioritized action plan. Nonprofits conduct strategic planning on a regular cycle and actively seek facilitators who understand their sector — not just generic strategy consultants.' },
+        education: { title: 'School or District Strategic Planning Facilitation', desc: 'A facilitated working session — typically one to two days — where you guide a school leadership team or district through a structured strategic planning process, a curriculum review, or a data-driven improvement planning exercise. Educational institutions conduct these planning processes regularly and need experienced external facilitators who understand the education environment.' },
+        government: { title: 'Public Sector Strategic Planning or Process Improvement Workshop', desc: 'A structured working session where you guide a government team through a strategic planning process, an operational review, or a defined problem-solving exercise. Government agencies conduct planning retreats and process improvement sessions regularly — and experienced facilitators who speak the language of public administration are consistently in demand.' },
+        healthcare: { title: 'Healthcare Strategy or Quality Improvement Workshop', desc: 'A structured working session — typically one to two days — where you bring a clinical or administrative leadership team through a quality improvement process, a strategic planning exercise, or an operational diagnostic. Healthcare organizations at every level conduct these sessions and actively seek facilitators who understand both the clinical environment and the organizational pressures involved.' },
+        general: { title: 'Consulting Intensive, Diagnostic Workshop, or Strategic Planning Facilitation', desc: 'A structured working session — typically one to three days — where you bring a group through a defined problem-solving process or strategic planning exercise and deliver a clear recommendation or action plan. Strategic planning engagements are especially well-compensated because you bring both the process and the outside perspective that an internal team cannot provide for itself. High value, short timeline, and a format that is easy to repeat across different organizations.' }
+      };
+      return groupProblemTitles[sector] || groupProblemTitles.general;
+    }
+
+    // People developer
+    if (e === 2) {
+      const groupPeopleTitles = {
+        nonprofit: { title: 'Nonprofit Leadership Development Cohort', desc: 'A structured group program — typically four to eight weeks — for nonprofit managers and emerging leaders developing their leadership skills. Nonprofits invest in leadership development for their staff, especially when the program is designed for the specific pressures of the sector: resource constraints, mission tension, board relationships, and staff retention. A cohort format creates peer learning that extends well beyond the program itself.' },
+        education: { title: 'Teacher Leadership or Instructional Coaching Cohort', desc: 'A structured group program for teachers developing instructional leadership skills, or instructional coaches building their coaching practice. Schools and districts purchase cohort-based professional development — especially programs that create peer learning communities within the institution. The cohort format is one of the most effective professional development models in education.' },
+        government: { title: 'Public Sector Leadership Development Cohort', desc: 'A structured group program for government managers and supervisors developing leadership skills. Government agencies invest in leadership development for their people, especially when the program is designed specifically for public sector realities — political context, civil service constraints, public accountability, and team management without the incentives available in the private sector.' },
+        healthcare: { title: 'Clinical Leadership Development Cohort', desc: 'A structured group program for nurses, clinical managers, or healthcare administrators developing leadership skills. Healthcare organizations promote clinical expertise into leadership without adequate leadership development. A cohort designed specifically for the healthcare environment — addressing the unique challenges of leading clinical teams, managing under pressure, and navigating institutional complexity — fills a gap that generic leadership programs do not.' },
+        general: { title: 'Group Training Program or Leadership Cohort', desc: 'A repeatable group training program delivered to teams, organizations, or cohorts of professionals. The format can run anywhere from a single intensive day to a multi-week program depending on the depth of the material. The advantage of group delivery is scale — you teach once and serve multiple participants simultaneously, which keeps your income from being directly tied to your hours.' }
+      };
+      return groupPeopleTitles[sector] || groupPeopleTitles.general;
+    }
+
+    // Program designer
+    if (e === 3) {
+      const groupProgramTitles = {
+        nonprofit: { title: 'Nonprofit Program Design or Capacity Building Workshop', desc: 'A structured workshop where you teach a nonprofit team how to design, evaluate, or improve a specific program using a clear framework. Small and mid-size nonprofits need this expertise but cannot always afford extended consulting. A focused workshop that delivers a repeatable methodology gives them tools they can apply immediately — and positions you as the natural next call when they need deeper support.' },
+        education: { title: 'Curriculum Design or Program Planning Workshop', desc: 'A structured workshop where you guide an education team through a curriculum design process, a program planning framework, or a data-informed improvement protocol. Schools and districts conduct these working sessions regularly. A facilitator who brings a clear, repeatable methodology and understands the education environment is exactly what they are looking for.' },
+        government: { title: 'Program Design or Operational Systems Workshop', desc: 'A structured working session where you guide a government team through a program design process, an operational systems review, or an implementation planning exercise. Government agencies at every level need help building and improving programs — and experienced facilitators who understand how government operates internally have a distinct advantage.' },
+        healthcare: { title: 'Healthcare Program Design or Workflow Improvement Workshop', desc: 'A structured workshop where you guide a healthcare team through a program design process, a workflow redesign, or an operational improvement exercise. Healthcare organizations invest in operational improvement consistently — and a facilitator who understands the clinical environment and can translate best practices into practical tools commands strong rates and repeat engagements.' },
+        general: { title: 'Operational Workshop or Systems Training', desc: 'A workshop built around a specific operational process, system, or framework you have developed over your career. Organizations pay to learn how to implement what you built. This format is particularly powerful when you have developed a repeatable methodology — because the workshop becomes the front door to deeper consulting or implementation work.' }
+      };
+      return groupProgramTitles[sector] || groupProgramTitles.general;
+    }
+
+    // Teacher / trainer
+    if (e === 4) {
+      const groupTeachTitles = {
+        nonprofit: { title: 'Nonprofit Staff Training or Board Development Workshop', desc: 'A targeted training session for nonprofit staff or board members on a specific skill — fundraising fundamentals, grant writing, program evaluation, financial literacy for boards, or governance best practices. Nonprofits purchase this kind of focused, practical training regularly. The more sector-specific the content, the more valuable it is — generic training programs do not speak the language of the nonprofit world.' },
+        education: { title: 'Professional Development Workshop for Educators', desc: 'A targeted professional development session for teachers, instructional coaches, or school leaders on a specific skill, methodology, or framework. Schools and districts have professional development budgets and actively seek practical, immediately applicable content from trainers who understand the education environment. The more specific your methodology, the easier it is to position and repeat.' },
+        government: { title: 'Public Sector Professional Development Workshop', desc: 'A targeted training session for government staff on a specific skill — writing for public audiences, project management in government, policy implementation, data literacy, or supervisory skills. Government agencies maintain professional development budgets and prefer trainers who understand the public sector context and can make content relevant to their specific environment.' },
+        healthcare: { title: 'Healthcare Team Training or Staff Development Workshop', desc: 'A targeted training session for healthcare teams on a specific clinical, operational, or interpersonal skill. Patient communication, care coordination, documentation efficiency, team collaboration, and leadership skills for frontline managers are all high-demand topics. Healthcare organizations invest heavily in team training — and trainers from within the sector who speak the clinical language are strongly preferred.' },
+        mentalhealth: { title: 'Clinical Skills Workshop or CE Training', desc: 'A continuing education or skills development workshop for mental health practitioners. This market is active and consistent — practitioners need CE credits, seek practical clinical skill development, and will pay for training from experienced practitioners in their specialty. A well-designed workshop becomes a repeatable annual offering with a growing professional community around it.' },
+        general: { title: 'Group Training or Certification Program', desc: 'A structured group program that teaches a defined body of knowledge or skill set. At the upper end, this can evolve into a certification or credentialing program — where participants pay to learn your methodology and carry it forward. This is one of the most scalable formats available to educators and trainers because the content becomes a licensable asset over time.' }
+      };
+      return groupTeachTitles[sector] || groupTeachTitles.general;
+    }
+
+    // Specialized advisor
+    if (e === 5) return {
+      title: 'Peer Advisory Group or Mastermind',
+      desc: 'A facilitated peer group where participants pay for the room, the structure, and your expertise as the convener. You bring together a small group of professionals facing similar challenges, facilitate the conversation, and provide expert guidance. This format is highly valued in fields where access to experienced peers is scarce — and it scales your income without scaling your time proportionally.'
+    };
+  }
+
+  // ── FALLBACK ──
+  return {
+    title: 'Packaged Expertise Offer',
+    desc: 'Based on your background, the strongest path is to identify your single most valuable expertise area, define a specific problem it solves, and build a clear offer around it. The format matters less than the clarity. A well-defined offer in any delivery format will outperform a vague offer in the premium format every time.'
+  };
+}
+
+// ─── RESULTS ─────────────────────────────────────────────
+function revealResults() {
+  document.getElementById('emailGate').classList.remove('visible');
+
+  const exp          = answers[1]?.value || 1;
+  const fieldText    = answers[2]?.label || 'your field';
+  const expertiseVal = answers[3]?.value || 1;
+  const deliveryVal  = answers[4]?.value || 2;
+  const reachVal     = answers[5]?.value || 2;
+  const isOther      = expertiseVal === 5;
+
+  // Base ranges by experience
+  const baseRanges = {
+    1: [35000, 65000],
+    2: [55000, 95000],
+    3: [75000, 130000],
+    4: [95000, 175000]
+  };
+
+  let [low, high] = baseRanges[exp] || baseRanges[1];
+
+  // Field multiplier (real market data)
+  const fieldResult = detectFieldTier(fieldText);
+  low  = Math.round(low  * fieldResult.mult);
+  high = Math.round(high * fieldResult.mult);
+
+  // Expertise type multiplier
+  const expMult = { 1: 1.15, 2: 1.0, 3: 1.05, 4: 0.95, 5: 1.1 };
+  low  = Math.round(low  * (expMult[expertiseVal] || 1.0));
+  high = Math.round(high * (expMult[expertiseVal] || 1.0));
+
+  // Delivery multiplier
+  const delivMult = { 1: 1.2, 2: 1.0, 3: 0.9, 4: 1.3 };
+  low  = Math.round(low  * (delivMult[deliveryVal] || 1.0));
+  high = Math.round(high * (delivMult[deliveryVal] || 1.0));
+
+  // Reach multiplier
+  const reachMult = { 1: 0.85, 2: 1.1, 3: 1.2 };
+  low  = Math.round(low  * (reachMult[reachVal] || 1.0));
+  high = Math.round(high * (reachMult[reachVal] || 1.0));
+
+  // Round to nearest $5k
+  low  = Math.round(low  / 5000) * 5000;
+  high = Math.round(high / 5000) * 5000;
+
+  const fmt = n => '$' + n.toLocaleString();
+
+  // Labels
+  const expLabels  = { 1:'10–15 years', 2:'16–20 years', 3:'21–25 years', 4:'25+ years' };
+  const expType    = { 1:'Problem-solving and strategy', 2:'People and leadership development', 3:'Program and operations design', 4:'Teaching and knowledge transfer', 5: answers[3]?.label || 'Specialized advisory' };
+  const delivLabel = { 1:'One-on-one consulting', 2:'Group workshops or training', 3:'Online course or program', 4:'Speaking and facilitation' };
+  const reachLabel = { 1:'In person (local/regional)', 2:'Virtual (national/global)', 3:'In person and virtual' };
+
+  // Field tier insight
+  const tierInsight = {
+    1: `Your field — <strong>${fieldText}</strong> — sits in a premium market tier. Organizations and individuals pay top rates for this expertise when it is packaged clearly.`,
+    2: `Your field — <strong>${fieldText}</strong> — has strong and consistent market demand. The professionals who command the upper end of this range are the ones with a specific, well-defined offer rather than a general one.`,
+    3: `Your field — <strong>${fieldText}</strong> — has a solid market, and packaging is everything here. The difference between the low and high end of your range is almost entirely a function of how clearly you define who you help and what you deliver.`,
+    4: `Your field — <strong>${fieldText}</strong> — is one where packaging matters more than almost anything else. Niche expertise with a clearly defined audience often commands stronger rates than generalist knowledge. The professionals who break out of this tier do it by getting extremely specific about who they serve and why.`
+  };
+
+  // Other field insight override
+  const otherInsight = `Your expertise doesn't fit a standard category — and that's actually a signal. Niche and unconventional expertise with a clearly defined audience often commands stronger rates than generalist knowledge. The professionals who monetize this kind of expertise most successfully are the ones who get specific about who needs it and why. That is exactly what the free webinar is built to help you do.`;
+
+  // Suggested package
+  const pkg = getSuggestedPackage(expertiseVal, deliveryVal, fieldText);
+
+  const panel = document.getElementById('resultPanel');
+  panel.innerHTML = `
+    <div class="result-header">
+      <div class="result-eyebrow">Your Estimated Annual Expertise Income Range</div>
+      <div class="result-range">${fmt(low)} – ${fmt(high)}</div>
+      <div class="result-sublabel">based on your answers · directional estimate</div>
+    </div>
+    <div class="result-breakdown">
+      <div class="breakdown-row">
+        <span class="label">Your field</span>
+        <span class="value">${fieldText.charAt(0).toUpperCase() + fieldText.slice(1)}</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="label">Years of experience</span>
+        <span class="value positive">${expLabels[exp]}</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="label">Expertise type</span>
+        <span class="value">${expType[expertiseVal]}</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="label">Delivery format</span>
+        <span class="value">${delivLabel[deliveryVal]}</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="label">Market reach</span>
+        <span class="value">${reachLabel[reachVal]}</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="label">Estimated annual income range</span>
+        <span class="value positive">${fmt(low)} – ${fmt(high)}</span>
+      </div>
+    </div>
+    <div class="package-block">
+      <div class="package-eyebrow">Your Suggested Starting Package</div>
+      <div class="package-title">${pkg.title}</div>
+      <div class="package-desc">${pkg.desc}</div>
+    </div>
+    <div class="result-insight" style="margin-top: 0;">
+      <p>${isOther ? otherInsight : tierInsight[fieldResult.tier]}</p>
+    </div>
+      <div class="result-cta">
+      <p style="margin-bottom:18px; font-size:14px; color:rgba(255,255,255,0.85); line-height:1.7; font-weight:300;">
+        You now know the range. The next step is building the actual package — and knowing exactly who will pay for it. That's what the free webinar does. We walk through it live, together. Spots are limited.
+      </p>
+      <button class="cta-button" onclick="window.open('${CTA_URL}','_blank')">${CTA_LABEL}</button>
+    </div>
+  `;
+
+  panel.classList.add('visible');
+  document.getElementById('resultNote').style.display = 'block';
+  document.getElementById('resetLink').style.display = 'block';
+  document.getElementById('stickyBar').style.display = 'none';
+
+  setTimeout(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ─── RESET ───────────────────────────────────────────────
+function resetAll() {
+  for (let i = 1; i <= TOTAL; i++) {
+    answers[i] = null;
+    const step = document.getElementById('step-' + i);
+    step.classList.remove('active');
+    step.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    const nextBtn = document.getElementById('next-' + i);
+    if (nextBtn) nextBtn.disabled = true;
+  }
+  document.querySelectorAll('.other-wrap').forEach(w => w.classList.remove('visible'));
+  document.getElementById('q2-field').value = '';
+  const otherText = document.getElementById('other-q3-text');
+  if (otherText) otherText.value = '';
+  document.getElementById('leadFirstName').value = '';
+  document.getElementById('leadEmail').value = '';
+  document.getElementById('gateError').classList.remove('visible');
+  document.getElementById('emailGate').classList.remove('visible');
+  const panel = document.getElementById('resultPanel');
+  panel.classList.remove('visible');
+  panel.innerHTML = '';
+  document.getElementById('resultNote').style.display = 'none';
+  document.getElementById('resetLink').style.display = 'none';
+  document.getElementById('mainDivider').style.display = 'none';
+  document.getElementById('stickyBar').style.display = 'flex';
+  document.getElementById('stickyHint').textContent = 'Answer all five questions, then see your estimate';
+  currentStep = 1;
+  document.getElementById('step-1').classList.add('active');
+  updateProgress(1);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+
+
+</body></html>
